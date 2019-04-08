@@ -30,3 +30,18 @@ use the following command to login to azure
 ```
 az login
 ```
+
+# Setup Terraform on Ubuntu
+Ensure wget and unzip are installed
+Download the latest Terraform Archive https://releases.hashicorp.com/terraform/
+```
+wget https://releases.hashicorp.com/terraform/VERSION/terraform_VERSION_linux_amd64.zip
+```
+Unzip the archive
+```
+unzip terraform_VERZION_linux_amd64.zip
+```
+Move the unzipped binary file to the directory /usr/local/bin
+```
+sudo mv terraform /usr/local/bin/
+```
