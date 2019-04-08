@@ -4,8 +4,8 @@
 Learning project for Terraform to provision a small webhosting setup of 2 webservers and 1 load balancer within Azure public cloud.
 
 # Prerequisites
-** Azure CLI
-** Terraform
+* Azure CLI
+* Terraform
 
 # Setup Azure CLI on Ubuntu
 Add Microsoft repo to the source repo list using below command:
