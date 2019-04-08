@@ -9,14 +9,14 @@ resource "azurerm_virtual_network" "vnet" {
   name                = "${var.virtual_network_name}"
   location            = "${azurerm_resource_group.tf_azure_guide.location}"
   address_space       = ["${var.address_space}"]
-  resource_group_name = "${azurerm_resource_group.tf_azure_guide.name}"
+  resource_group_name = "${azurerm_resource_group.terraform-project.name}"
 }
 
 # create the subnet for the virtual machines
 resource "azurerm_subnet" "subnet" {
   name                 = "${var.prefix}subnet"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-  resource_group_name  = "${azurerm_resource_group.tf_azure_guide.name}"
+  resource_group_name  = "${azurerm_resource_group.terraform-project.name}"
   address_prefix       = "${var.subnet_prefix}"
 }
 
@@ -26,7 +26,7 @@ resource "azurerm_subnet" "subnet" {
 resource "azurerm_network_security_group" "terraform-project-sg" {
   name                = "${var.prefix}-sg"
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.tf_azure_guide.name}"
+  resource_group_name = "${azurerm_resource_group.terraform-project.name}"
 
   security_rule {
     name                       = "HTTP"
@@ -57,7 +57,7 @@ resource "azurerm_network_security_group" "terraform-project-sg" {
 resource "azurerm_network_interface" "tfp-nic" {
   name                      = "${var.prefix}tfp-nic"
   location                  = "${var.location}"
-  resource_group_name       = "${azurerm_resource_group.tf_azure_guide.name}"
+  resource_group_name       = "${azurerm_resource_group.terraform-project.name}"
   network_security_group_id = "${azurerm_network_security_group.tf-guide-sg.id}"
 
   ip_configuration {
@@ -72,7 +72,7 @@ resource "azurerm_network_interface" "tfp-nic" {
 resource "azurerm_virtual_machine" "site" {
   name                = "${var.hostname}-site"
   location            = "${var.location}"
-  resource_group_name = "${azurerm_resource_group.tf_azure_guide.name}"
+  resource_group_name = "${azurerm_resource_group.terraform-project.name}"
   vm_size             = "${var.vm_size}"
 
   network_interface_ids         = ["${azurerm_network_interface.tfp-nic.id}"]
