@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "terraform-project" {
 # create the virtual network
 resource "azurerm_virtual_network" "vnet" {
   name                = "${var.virtual_network_name}"
-  location            = "${azurerm_resource_group.tf_azure_guide.location}"
+  location            = "${azurerm_resource_group.terraform-project.location}"
   address_space       = ["${var.address_space}"]
   resource_group_name = "${azurerm_resource_group.terraform-project.name}"
 }
@@ -58,13 +58,13 @@ resource "azurerm_network_interface" "tfp-nic" {
   name                      = "${var.prefix}tfp-nic"
   location                  = "${var.location}"
   resource_group_name       = "${azurerm_resource_group.terraform-project.name}"
-  network_security_group_id = "${azurerm_network_security_group.tf-guide-sg.id}"
+  network_security_group_id = "${azurerm_network_security_group.tfp-sg.id}"
 
   ip_configuration {
     name                          = "${var.prefix}ipconfig"
     subnet_id                     = "${azurerm_subnet.subnet.id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.tf-guide-pip.id}"
+    public_ip_address_id          = "${azurerm_public_ip.tfp-pip.id}"
   }
 }
 
