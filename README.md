@@ -34,7 +34,7 @@ az login
 # Setup Terraform on Ubuntu
 Ensure wget and unzip are installed
 
-Download the latest Terraform Archive https://releases.hashicorp.com/terraform/
+Download the latest Terraform release https://releases.hashicorp.com/terraform/
 ```
 wget https://releases.hashicorp.com/terraform/VERSION/terraform_VERSION_linux_amd64.zip
 ```
