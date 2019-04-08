@@ -20,10 +20,12 @@ resource "azurerm_subnet" "subnet" {
   address_prefix       = "${var.subnet_prefix}"
 }
 
+##
 # build a CentOS 7.5 virtual machine
+##
 
 # security group to allow inbound access on port 80 (http) and 22 (ssh)
-resource "azurerm_network_security_group" "terraform-project-sg" {
+resource "azurerm_network_security_group" "tfp-sg" {
   name                = "${var.prefix}-sg"
   location            = "${var.location}"
   resource_group_name = "${azurerm_resource_group.terraform-project.name}"
