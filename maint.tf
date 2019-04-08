@@ -129,7 +129,7 @@ resource "azurerm_virtual_machine" "site" {
         type     = "ssh"
         user     = "${var.admin_username}"
         password = "${var.admin_password}"
-        host     = "${azurerm_public_ip.tf-guide-pip.fqdn}"
+        host     = "${azurerm_public_ip.tfp-pip.fqdn}"
       }
     }
   }
