@@ -1,14 +1,14 @@
-variable "prefix" {
-  default = "tfp"
+variable "project" {
+  default = "tf"
 }
 
 resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-resources"
+  name     = "${var.project}-resources"
   location = "centralus"
 }
 
 resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
+  name                = "${var.project}-network"
   address_space       = ["192.168.0.0/16"]
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
@@ -22,23 +22,24 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
+  name                = "${var.project}-nic"
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
 
 ip_configuration {
-  name                          = "Web01"
+  name                          = "web${count.index}"
   subnet_id                     = "${azurerm_subnet.internal.id}"
   private_ip_address_allocation = "Dynamic"
   }
 }
 
 resource "azurerm_virtual_machine" "main" {
-  name                  = "{var.prefix}-web01"
+  name                  = "${var.project}-web${count.index}"
   location              = "${azurerm_resource_group.main.location}"
   resource_group_name   = "${azurerm_resource_group.main.name}"
   network_interface_ids = ["${azurerm_network_interface.main.id}"]
   vm_size               = "Standard_B1s"
+  count                 = 3
 
 delete_os_disk_on_termination = true
 delete_data_disks_on_termination = true
@@ -50,13 +51,13 @@ storage_image_reference {
     version   = "latest"
   }
   storage_os_disk {
-    name              = "Web01Disk1"
+    name              = "Web${count.index}Disk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name  = "web01"
+    computer_name  = "web${count.index}"
     admin_username = "josh"
     admin_password = "Password1234!"
   }
