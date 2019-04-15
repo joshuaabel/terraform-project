@@ -25,6 +25,7 @@ resource "azurerm_network_interface" "main" {
   name                = "${var.project}-nic${count.index}"
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
+  count               = 3
 
 ip_configuration {
   name                          = "web${count.index}"
@@ -37,7 +38,7 @@ resource "azurerm_virtual_machine" "main" {
   name                  = "${var.project}-web${count.index}"
   location              = "${azurerm_resource_group.main.location}"
   resource_group_name   = "${azurerm_resource_group.main.name}"
-  network_interface_ids = ["${azurerm_network_interface.main.id}"]
+  network_interface_ids = ["${element(azurerm_network_interface.main.*.id, count.index)}"]
   vm_size               = "Standard_B1s"
   count                 = 3
 
