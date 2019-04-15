@@ -1,23 +1,23 @@
-resource "azurerm_network_interface" "web" {
-  name                = "${var.project}-web-nic${count.index}"
+resource "azurerm_network_interface" "lb" {
+  name                = "${var.project}-lb-nic${count.index}"
   location            = "${azurerm_resource_group.main.location}"
   resource_group_name = "${azurerm_resource_group.main.name}"
-  count               = "${var.web_count}"
+  count               = "${var.lb_count}"
 
 ip_configuration {
-  name                          = "web${count.index}"
+  name                          = "lb${count.index}"
   subnet_id                     = "${azurerm_subnet.internal.id}"
   private_ip_address_allocation = "Dynamic"
   }
 }
 
-resource "azurerm_virtual_machine" "web" {
-  name                  = "${var.project}-web${count.index}"
+resource "azurerm_virtual_machine" "lb" {
+  name                  = "${var.project}-lb${count.index}"
   location              = "${azurerm_resource_group.main.location}"
   resource_group_name   = "${azurerm_resource_group.main.name}"
-  network_interface_ids = ["${element(azurerm_network_interface.web.*.id, count.index)}"]
+  network_interface_ids = ["${element(azurerm_network_interface.lb.*.id, count.index)}"]
   vm_size               = "Standard_B1s"
-  count                 = "${var.web_count}"
+  count                 = "${var.lb_count}"
 
 delete_os_disk_on_termination = true
 delete_data_disks_on_termination = true
@@ -29,13 +29,13 @@ storage_image_reference {
     version   = "${var.image_version}"
   }
   storage_os_disk {
-    name              = "web${count.index}_disk1"
+    name              = "lb${count.index}_disk1"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"
   }
   os_profile {
-    computer_name  = "web${count.index}"
+    computer_name  = "lb${count.index}"
     admin_username = "${var.admin_username}"
     admin_password = "${var.admin_password}"
   }
